@@ -1,4 +1,4 @@
 all: bin/lsprofiles
 
-bin/lsprofiles: $(wildcard lsprofiles/*)
-	cd lsprofiles && go build -o ../bin/lsprofiles
+bin/lsprofiles: $(wildcard cmd/lsprofiles/*)
+	cd cmd/lsprofiles && go build -o ../bin/lsprofiles
