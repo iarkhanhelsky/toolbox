@@ -34,7 +34,7 @@ func scanProfiles(path string) []string {
 	return paths
 }
 
-func readAll(paths []string) ([]provisioningProfile) {
+func readAll(paths []string) []provisioningProfile {
 	var provisions []provisioningProfile
 	results := make(chan provisioningProfile)
 	errors := make(chan error)
