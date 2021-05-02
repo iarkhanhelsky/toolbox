@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"github.com/groob/plist"
 	"go.mozilla.org/pkcs7"
 	"io/ioutil"
@@ -34,9 +35,17 @@ func (receiver provisioningProfile) appId() string {
 
 func readProvisioningProfile(path string) (provisioningProfile, error) {
 	pkey, _ := ioutil.ReadFile(path)
-	obj, _ := pkcs7.Parse(pkey)
+	obj, err := pkcs7.Parse(pkey)
+	if err != nil {
+		return provisioningProfile{}, errors.New(path + ":" + err.Error())
+	}
+	decoder := plist.NewXMLDecoder(bytes.NewReader(obj.Content))
+	if decoder == nil {
+		return provisioningProfile{}, errors.New("Can't read profile from file " + path)
+	}
+
 	var info provisioningProfile
-	err := plist.NewXMLDecoder(bytes.NewReader(obj.Content)).Decode(&info)
+	err = decoder.Decode(&info)
 	info.PlistData = string(obj.Content)
 	info.FilePath = path
 	return info, err

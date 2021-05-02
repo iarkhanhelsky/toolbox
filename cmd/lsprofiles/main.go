@@ -23,7 +23,7 @@ func scanProfiles(path string) []string {
 			fmt.Printf("error: %s", err.Error())
 		}
 
-		for _, f := range(files) {
+		for _, f := range files {
 			if !f.IsDir() && strings.HasSuffix(f.Name(), ".mobileprovision") {
 				paths = append(paths, filepath.Join(path, f.Name()))
 			}
@@ -34,17 +34,38 @@ func scanProfiles(path string) []string {
 	return paths
 }
 
-func readAll(paths []string) ([]provisioningProfile, error) {
+func readAll(paths []string) ([]provisioningProfile) {
 	var provisions []provisioningProfile
-	for _, f := range(paths) {
-		i, err := readProvisioningProfile(f)
-		if err != nil {
-			return nil, err
-		}
-		provisions = append(provisions, i)
+	results := make(chan provisioningProfile)
+	errors := make(chan error)
+	defer close(results)
+	defer close(errors)
+
+	errorsCount := 0
+
+	for _, f := range paths {
+		f := f
+		go func() {
+			p, err := readProvisioningProfile(f)
+			if err != nil {
+				errors <- err
+			} else {
+				results <- p
+			}
+		}()
 	}
 
-	return provisions, nil
+	for len(provisions) + errorsCount < len(paths) {
+		select {
+		case r := <- results:
+			provisions = append(provisions, r)
+		case err := <- errors:
+			errorsCount += 1
+			fmt.Fprintf(os.Stderr, "error: %s\n", err.Error())
+		}
+	}
+
+	return provisions
 }
 
 func filter(profiles []provisioningProfile, uuidFilter string) []provisioningProfile {
@@ -59,11 +80,7 @@ func filter(profiles []provisioningProfile, uuidFilter string) []provisioningPro
 
 func main() {
 	args := parseCLI()
-	profiles, err := readAll(scanProfiles(args.Path))
-	if err != nil {
-		fmt.Printf("error: %s", err.Error())
-		os.Exit(2)
-	}
+	profiles := readAll(scanProfiles(args.Path))
 
 	profiles = filter(profiles, args.UUIDFilter)
 	if args.PrintPlist || args.PrintDetails {
