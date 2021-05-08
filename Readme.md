@@ -44,7 +44,7 @@ Created    Env Team ID    Name                                     UUID         
 
 Print `~/.ssh/config` in compacted way for easier greping. 
 
-It treats each `Host` entry in ssh-config as separate host. And prints essential information about it.  
+It treats each `Host` entry in ssh-config as separate host and prints essential information about it.  
 
 ### Example
 ```
