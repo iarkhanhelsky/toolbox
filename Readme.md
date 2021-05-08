@@ -16,7 +16,7 @@ Usage of lsprofiles:
   -d	Print full information for each profile
   -p	Print provisioning profile plist
   -path string
-    	Directory path or *.mobileprovision file (default "/Users/dm/Library/MobileDevice/Provisioning Profiles")
+    	Directory path or *.mobileprovision file (default "$HOME/Library/MobileDevice/Provisioning Profiles")
   -print-details
     	Print full information for each profile
   -print-plist
