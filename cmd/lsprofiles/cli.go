@@ -7,10 +7,11 @@ import (
 )
 
 type cliArgs struct {
-	UUIDFilter   string
-	Path         string
-	PrintPlist   bool
-	PrintDetails bool
+	UUIDFilter    string
+	AppIDFilter   string
+	Path          string
+	PrintPlist    bool
+	PrintDetails  bool
 
 	ShowVersion bool
 }
@@ -24,6 +25,8 @@ func parseCLI() cliArgs  {
 	flag.StringVar(&args.Path, "path", defaultProvisioningDir, "Directory path or *.mobileprovision file")
 	flag.StringVar(&args.UUIDFilter, "uuid-filter", "", "Filter by UUID")
 	flag.StringVar(&args.UUIDFilter, "u", "", "Filter by UUID")
+	flag.StringVar(&args.AppIDFilter, "appid-filter", "", "Filter by Application ID")
+	flag.StringVar(&args.AppIDFilter, "a", "", "Filter by Application ID")
 	flag.BoolVar(&args.PrintDetails, "print-details", false, "Print full information for each profile")
 	flag.BoolVar(&args.PrintDetails, "d", false, "Print full information for each profile")
 	flag.BoolVar(&args.PrintPlist, "print-plist", false, "Print provisioning profile plist")

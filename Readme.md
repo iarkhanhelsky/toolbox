@@ -4,6 +4,31 @@ Set of handy tools for occasional use.
 
 ## lsprofiles
 
+List essential information about your [provisioning profiles](https://developer.apple.com/documentation/appstoreconnectapi/profiles) 
+
+```
+$ lsprofiles --help
+Usage of lsprofiles:
+  -a string
+    	Filter by Application ID
+  -appid-filter string
+    	Filter by Application ID
+  -d	Print full information for each profile
+  -p	Print provisioning profile plist
+  -path string
+    	Directory path or *.mobileprovision file (default "/Users/dm/Library/MobileDevice/Provisioning Profiles")
+  -print-details
+    	Print full information for each profile
+  -print-plist
+    	Print provisioning profile plist
+  -u string
+    	Filter by UUID
+  -uuid-filter string
+    	Filter by UUID
+  -v	Show version and exit
+```
+
+### Example
 ```
 $ lsprofiles
 Created    Env Team ID    Name                                     UUID                                 File
@@ -13,10 +38,15 @@ Created    Env Team ID    Name                                     UUID         
 2021-03-24   D XX99Y9Z999 com.org.App2                             a9aa5b8c-afe5-11eb-a8e6-53de6cdc54d5 a9aa5b8c-afe5-11eb-a8e6-53de6cdc54d5.mobileprovision
 ```
 
+
+
 ## lshosts
 
 Print `~/.ssh/config` in compacted way for easier greping. 
 
+It treats each `Host` entry in ssh-config as separate host. And prints essential information about it.  
+
+### Example
 ```
 $ lshosts
 *
