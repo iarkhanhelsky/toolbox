@@ -64,6 +64,6 @@ func main() {
 	f, _ := os.Open(filepath.Join(os.Getenv("HOME"), ".ssh", "config"))
 	cfg, _ := ssh_config.Decode(f)
 	for _, host := range cfg.Hosts {
-		println(readHost(host).String())
+		fmt.Println(readHost(host).String())
 	}
 }
