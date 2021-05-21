@@ -43,6 +43,7 @@ func printProvisioningProfilesDetails(profile provisioningProfile) {
 	fmt.Printf("Created:    %s\n", profile.CreationDate.Format("2006-01-02"))
 	fmt.Printf("Platform:   %s\n", profile.Platform[0])
 	fmt.Printf("Enviroment: %v\n", profile.Entitlements.ApsEnv)
+	fmt.Printf("-----------------------------------------------------------------------------\n")
 }
 
 func printProvisioningProfilePlist(profile provisioningProfile) {

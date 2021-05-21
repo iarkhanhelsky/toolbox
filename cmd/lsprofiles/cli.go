@@ -7,13 +7,15 @@ import (
 )
 
 type cliArgs struct {
-	UUIDFilter    string
-	AppIDFilter   string
-	Path          string
-	PrintPlist    bool
-	PrintDetails  bool
+	UUIDFilter   string
+	AppIDFilter  string
+	TeamIDFilter string
+	Path         string
+	PrintPlist   bool
+	PrintDetails bool
 
-	ShowVersion bool
+	ShowVersion  bool
+
 }
 
 func parseCLI() cliArgs  {
@@ -27,6 +29,8 @@ func parseCLI() cliArgs  {
 	flag.StringVar(&args.UUIDFilter, "u", "", "Filter by UUID")
 	flag.StringVar(&args.AppIDFilter, "appid-filter", "", "Filter by Application ID")
 	flag.StringVar(&args.AppIDFilter, "a", "", "Filter by Application ID")
+	flag.StringVar(&args.TeamIDFilter, "teamid-filter", "", "Filter by Team ID")
+	flag.StringVar(&args.TeamIDFilter, "t", "", "Filter by Team ID")
 	flag.BoolVar(&args.PrintDetails, "print-details", false, "Print full information for each profile")
 	flag.BoolVar(&args.PrintDetails, "d", false, "Print full information for each profile")
 	flag.BoolVar(&args.PrintPlist, "print-plist", false, "Print provisioning profile plist")

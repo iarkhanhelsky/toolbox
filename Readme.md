@@ -7,7 +7,7 @@ Set of handy tools for occasional use.
 List essential information about your [provisioning profiles](https://developer.apple.com/documentation/appstoreconnectapi/profiles) 
 
 ```
-$ lsprofiles --help
+$ lsprofiles -h
 Usage of lsprofiles:
   -a string
     	Filter by Application ID
@@ -21,6 +21,10 @@ Usage of lsprofiles:
     	Print full information for each profile
   -print-plist
     	Print provisioning profile plist
+  -t string
+    	Filter by Team ID
+  -teamid-filter string
+    	Filter by Team ID
   -u string
     	Filter by UUID
   -uuid-filter string
