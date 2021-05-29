@@ -10,12 +10,13 @@ type cliArgs struct {
 	UUIDFilter   string
 	AppIDFilter  string
 	TeamIDFilter string
+	NameFilter   string
+
 	Path         string
 	PrintPlist   bool
 	PrintDetails bool
 
 	ShowVersion  bool
-
 }
 
 func parseCLI() cliArgs  {
@@ -25,12 +26,16 @@ func parseCLI() cliArgs  {
 	defaultProvisioningDir := filepath.Join(userHome, "Library/MobileDevice/Provisioning Profiles")
 
 	flag.StringVar(&args.Path, "path", defaultProvisioningDir, "Directory path or *.mobileprovision file")
+
 	flag.StringVar(&args.UUIDFilter, "uuid-filter", "", "Filter by UUID")
-	flag.StringVar(&args.UUIDFilter, "u", "", "Filter by UUID")
+	flag.StringVar(&args.UUIDFilter, "U", "", "Filter by UUID")
 	flag.StringVar(&args.AppIDFilter, "appid-filter", "", "Filter by Application ID")
-	flag.StringVar(&args.AppIDFilter, "a", "", "Filter by Application ID")
+	flag.StringVar(&args.AppIDFilter, "A", "", "Filter by Application ID")
 	flag.StringVar(&args.TeamIDFilter, "teamid-filter", "", "Filter by Team ID")
-	flag.StringVar(&args.TeamIDFilter, "t", "", "Filter by Team ID")
+	flag.StringVar(&args.TeamIDFilter, "T", "", "Filter by Team ID")
+	flag.StringVar(&args.NameFilter, "name-filter", "", "Filter by Name")
+	flag.StringVar(&args.NameFilter, "N", "", "Filter by Name")
+
 	flag.BoolVar(&args.PrintDetails, "print-details", false, "Print full information for each profile")
 	flag.BoolVar(&args.PrintDetails, "d", false, "Print full information for each profile")
 	flag.BoolVar(&args.PrintPlist, "print-plist", false, "Print provisioning profile plist")
@@ -45,4 +50,34 @@ func parseCLI() cliArgs  {
 	}
 
 	return args
+}
+
+func (receiver cliArgs) filter() Filter {
+	var filters []Filter
+
+	if receiver.UUIDFilter != "" {
+		filter := StringContainsFilter{value: receiver.UUIDFilter,
+			extractFunc: func (p provisioningProfile) string { return p.UUID }}
+		filters = append(filters, filter)
+	}
+
+	if receiver.AppIDFilter != "" {
+		filter := StringContainsFilter{value: receiver.AppIDFilter,
+			extractFunc: func (p provisioningProfile) string { return p.appId() }}
+		filters = append(filters, filter)
+	}
+
+	if receiver.TeamIDFilter != "" {
+		filter :=  StringContainsFilter{value: receiver.TeamIDFilter,
+			extractFunc: func (p provisioningProfile) string { return p.TeamIdentifier[0] }}
+		filters = append(filters, filter)
+	}
+
+	if receiver.NameFilter != "" {
+		filter := StringContainsFilter{value: receiver.NameFilter,
+			extractFunc: func (p provisioningProfile) string { return p.Name }}
+		filters = append(filters, filter)
+	}
+
+	return CompoundFilter{filters: filters}
 }

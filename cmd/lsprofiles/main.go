@@ -68,10 +68,10 @@ func readAll(paths []string) []provisioningProfile {
 	return provisions
 }
 
-func filter(profiles []provisioningProfile, uuidFilter string, appIdFilter string, teamIdFilter string) []provisioningProfile {
+func filter(profiles []provisioningProfile, filter Filter) []provisioningProfile {
 	var filtered []provisioningProfile
 	for _, p := range profiles {
-		if strings.Contains(p.UUID, uuidFilter) && strings.Contains(p.appId(), appIdFilter) && strings.Contains(p.TeamIdentifier[0], teamIdFilter) {
+		if filter.match(p) {
 			filtered = append(filtered, p)
 		}
 	}
@@ -82,7 +82,7 @@ func main() {
 	args := parseCLI()
 	profiles := readAll(scanProfiles(args.Path))
 
-	profiles = filter(profiles, args.UUIDFilter, args.AppIDFilter, args.TeamIDFilter)
+	profiles = filter(profiles, args.filter())
 	if args.PrintPlist || args.PrintDetails {
 		for _, profile := range profiles {
 			fmt.Printf("%s\n", profile.FilePath)

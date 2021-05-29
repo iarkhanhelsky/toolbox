@@ -12,7 +12,7 @@ func printProvisioningProfilesTable(profiles []provisioningProfile) {
 		return strings.Compare(profiles[i].Entitlements.ApplicationIdentifier, profiles[j].Entitlements.ApplicationIdentifier) < 0
 	})
 
-	fmt.Printf("%-10s %-3s %-10s %-40s %-36s %s\n", "Created", "Env", "Team ID", "Name", "UUID", "File")
+	fmt.Printf("%-10s %-3s %-10s %-40s %-36s %s\n", "Created", "Env", "Team ID", "App ID", "UUID", "File")
 	for _, i := range profiles {
 		printProvisioningProfilesRow(i)
 	}
