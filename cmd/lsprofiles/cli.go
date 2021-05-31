@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -25,8 +26,6 @@ func parseCLI() cliArgs  {
 	userHome, _ := os.UserHomeDir()
 	defaultProvisioningDir := filepath.Join(userHome, "Library/MobileDevice/Provisioning Profiles")
 
-	flag.StringVar(&args.Path, "path", defaultProvisioningDir, "Directory path or *.mobileprovision file")
-
 	flag.StringVar(&args.UUIDFilter, "uuid-filter", "", "Filter by UUID")
 	flag.StringVar(&args.UUIDFilter, "U", "", "Filter by UUID")
 	flag.StringVar(&args.AppIDFilter, "appid-filter", "", "Filter by Application ID")
@@ -43,6 +42,16 @@ func parseCLI() cliArgs  {
 	flag.BoolVar(&args.ShowVersion, "v", false, "Show version and exit")
 
 	flag.Parse()
+
+	if flag.NArg() > 0 {
+		args.Path = flag.Arg(0)
+		if _, err := os.Stat(args.Path); os.IsNotExist(err) {
+			fmt.Fprintf(os.Stderr, "error: %s does not exist\n", args.Path)
+			os.Exit(2)
+		}
+	} else {
+		args.Path = defaultProvisioningDir
+	}
 
 	if args.ShowVersion {
 		println("v0.0.0")
