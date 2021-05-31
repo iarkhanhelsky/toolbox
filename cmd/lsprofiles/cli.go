@@ -26,6 +26,16 @@ func parseCLI() cliArgs  {
 	userHome, _ := os.UserHomeDir()
 	defaultProvisioningDir := filepath.Join(userHome, "Library/MobileDevice/Provisioning Profiles")
 
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "NAME\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "\tlsprofiles - list installed provision profiles\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "SYNOPSIS\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "\tlsprofiles [OPTION]... [PATH]\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "DESCRIPTION\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "\tList information about installed provision profiles ($HOME/Library/MobileDevice/Provisioning Profiles by default)\n")
+		flag.PrintDefaults()
+	}
+
 	flag.StringVar(&args.UUIDFilter, "uuid-filter", "", "Filter by UUID")
 	flag.StringVar(&args.UUIDFilter, "U", "", "Filter by UUID")
 	flag.StringVar(&args.AppIDFilter, "appid-filter", "", "Filter by Application ID")
