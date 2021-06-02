@@ -1,6 +1,8 @@
 package main
 
-import "strings"
+import (
+	"strings"
+)
 
 type Filter interface {
 	match(profile provisioningProfile) bool
@@ -27,4 +29,13 @@ type StringContainsFilter struct {
 
 func (receiver StringContainsFilter) match(profile provisioningProfile) bool {
 	return strings.Contains(receiver.extractFunc(profile), receiver.value)
+}
+
+type StringEqualsFilter struct {
+	value string
+	extractFunc func(profile provisioningProfile) string
+}
+
+func (receiver StringEqualsFilter) match(profile provisioningProfile) bool {
+	return strings.Compare(receiver.extractFunc(profile), receiver.value) == 0
 }

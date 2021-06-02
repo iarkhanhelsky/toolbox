@@ -12,6 +12,7 @@ type cliArgs struct {
 	AppIDFilter  string
 	TeamIDFilter string
 	NameFilter   string
+	DateFilter   string
 
 	Path         string
 	PrintPlist   bool
@@ -44,6 +45,8 @@ func parseCLI() cliArgs  {
 	flag.StringVar(&args.TeamIDFilter, "T", "", "Filter by Team ID")
 	flag.StringVar(&args.NameFilter, "name-filter", "", "Filter by Name")
 	flag.StringVar(&args.NameFilter, "N", "", "Filter by Name")
+	flag.StringVar(&args.DateFilter, "D", "", "Filter by Date")
+	flag.StringVar(&args.DateFilter, "date-filter", "", "Filter by Date")
 
 	flag.BoolVar(&args.PrintDetails, "print-details", false, "Print full information for each profile")
 	flag.BoolVar(&args.PrintDetails, "d", false, "Print full information for each profile")
@@ -95,6 +98,15 @@ func (receiver cliArgs) filter() Filter {
 	if receiver.NameFilter != "" {
 		filter := StringContainsFilter{value: receiver.NameFilter,
 			extractFunc: func (p provisioningProfile) string { return p.Name }}
+		filters = append(filters, filter)
+	}
+
+	if receiver.DateFilter != "" {
+		filter := StringEqualsFilter{value: receiver.DateFilter,
+			extractFunc: func(p provisioningProfile) string {
+				return p.CreationDate.Format("2006-01-02")
+			}}
+
 		filters = append(filters, filter)
 	}
 
